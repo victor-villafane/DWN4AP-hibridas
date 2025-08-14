@@ -8,14 +8,15 @@ http.createServer( function(request, response){
     // }else{
     //     response.end(`Me llamaron 2.0: ${request.url}`)
     // }
+    response.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body>`)
     switch(request.url){
         case "/":
             response.write("<h1>Llamaron a home</h1>")
             response.write("<h1>Llamaron a home</h1>")
-            response.end()
+            
             break
         case "/usuarios":
-            response.end(`
+            response.write(`
                 <table>
                     <tr>
                         <th>id</th>
@@ -28,7 +29,9 @@ http.createServer( function(request, response){
                 </table>`)
                 break
             default:
-                response.end("No entendi!")
+                response.write("No entendi!")
                 break
     }
+    response.write(`</body></html>`)
+    response.end()
 } ).listen(2025)
