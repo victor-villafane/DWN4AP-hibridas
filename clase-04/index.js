@@ -1,70 +1,27 @@
-import { createServer } from "http"
+import express from "express"
 
-import productos from "./data/productos.js"
-import { createPage, createProductList } from "./pages/utils.js"
-import { readFile } from "fs"
+const app = express()
 
-const server = createServer(function (req, res) {
-    console.log(req.url)
-    switch (req.url) {
-        case "/":
-            res.write(createPage("Home", "nombre y apellido"))
-            res.end()
-            break
-        case "/materia":
-            res.write(createPage("Materia", "Aplicaciones hibridas"))
-            res.end()
-            break
-        case "/profesor":
-            res.write(createPage("Profesor", "Nombre profesor"))
-            res.end()
-            break
-        case "/productos":
-            res.write(createPage("Productos", createProductList(productos)))
-            res.end()
-            break
-        case "/hola.html":
-            readFile("./public/hola.html", "utf-8", function (err, data) {
-                if (err) res.end("500 error interno del servidor")
-                res.write(data)
-                res.end()
-            })
-            break
-        case "/style.css":
-            readFile("./public/style.css", "utf-8", function (err, data) {
-                if (err) res.end("500 error interno del servidor")
-                res.write(data)
-                res.end()
-            })
-            break
-        case "/home.html":
-            readFile("./public/home.html", "utf-8", function (err, data) {
-                if (err) res.end("500 error interno del servidor")
-                res.write(data)
-                res.end()
-            })
-            break
-        case "/img/1.png":
-            readFile("./public/img/1.png", function (err, data) {
-                if (err) res.end("500 error interno del servidor")
-                res.write(data)
-                res.end()
-            })
-            break
-        case "/contacto.html":
-            readFile("./public/contacto.html", "utf-8", function (err, data) {
-                if (err) res.end("500 error interno del servidor")
-                res.write(data)
-                res.end()
-            })
-            break
-        default:
-            res.write(createPage("404", "Pagina no encontrada"))
-            res.end()
-            break
-    }
+app.use("/",express.static("public"))
+app.use(express.json())                         // para poder recibir datos en formato json
+app.use(express.urlencoded({ extended: true })) // para poder recibir datos en formato urlencoded
+let contador = 0 // esto se guarda en memoria ram
+
+app.get("/saludo", (req, res) => {
+    const nombre = req.query.nombre
+    res.send(`<h1>Hola, bienvenido a mi servidor Express ${nombre}</h1>`)
+} )
+
+app.post("/saludo", (req, res) => {
+    const nombre = req.body.nombre
+    res.send(`<h1>Hola, bienvenido a mi servidor Express ${nombre}</h1>`)
 })
 
-server.listen(2025, () => {
-    console.log("Funcionando....")
+app.get("/contador", (req, res) =>{
+    contador++
+    res.send(`<h1>El contador ha sido incrementado a: ${contador}</h1>`)
+} )
+
+app.listen(2025, () => {
+    console.log("Servidor escuchando en el puerto 2025")
 })
