@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "marca": "Nike",
+        "modelo": "Air Max 90",
+        "precio": 120.00
+    },
+    {
+        "id": 2,
+        "marca": "Adidas",
+        "modelo": "Ultraboost 21",
+        "precio": 180.00
+    },
+    {
+        "id": 3,
+        "marca": "Puma",
+        "modelo": "RS-X3",
+        "precio": 110.00
+    },
+    {
+        "id": 4,
+        "marca": "Reebok",
+        "modelo": "Nano X1",
+        "precio": 130.00
+    },
+    {
+        "id": 5,
+        "marca": "New Balance",
+        "modelo": "Fresh Foam 1080v11",
+        "precio": 150.00
+    }
+]
