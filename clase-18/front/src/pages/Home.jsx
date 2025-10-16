@@ -3,11 +3,22 @@ import { Link, NavLink } from 'react-router-dom'
 
 const Home = () => {
     const [plantas, setPlantas] = useState([])
+    const [ loading, setLoading ] = useState(true)
+    const [error, setError] = useState(null)
+    const [page, setPage] = useState(1)
     useEffect(() => {
-        fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://trefle.io/api/v1/plants?token=usr-t_cGbObu6nvYAQ83h85crSdCalvm9DKFZWZ74jojFnE"))
+        setLoading(true)
+        fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://trefle.io/api/v1/plants?token=usr-t_cGbObu6nvYAQ83h85crSdCalvm9DKFZWZ74jojFnE&page="+page))
             .then(res => res.json())
             .then(info => setPlantas(info.data))
-    }, [])
+            .catch( (err) => setError(err.message) )
+            .finally( () => setLoading(false) )
+    }, [page])
+
+
+    // if( loading ) return <div>Cargando...</div>
+    if( error ) return <div>{error}</div>
+
     return (
         <div className='p-6 bg-gray-50 min-h-screen'>
             <div className='max-w-7xl mx-auto' >
@@ -32,9 +43,13 @@ const Home = () => {
                             </th>
                         </tr>
                     </thead>
+                    {/* Pueden usar Activity 19.2 */}
+                    {
+                        loading && <div>Cargando...</div> 
+                    }
                     <tbody>
                         {
-                            plantas.map(planta => (
+                            loading == false && plantas.map(planta => (
                                 <tr key={planta.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {planta.id}
@@ -57,6 +72,8 @@ const Home = () => {
                         }
                     </tbody>
                 </table>
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium" onClick={ () => setPage(page - 1) } >Anterior</button>
+                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium" onClick={ () => setPage(page + 1) } >Siguente</button>
             </div>
         </div>
     )
